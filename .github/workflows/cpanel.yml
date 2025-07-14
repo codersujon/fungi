@@ -1,4 +1,4 @@
-name: 🚀 FTP Deploy
+name: 🚀 FTP Deploy to Cpanel
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  web-deploy:
+  FTP-Deploy-Action:
     name: 🎉 FTP Deploy
     runs-on: ubuntu-latest
     steps:
@@ -25,13 +25,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ftp.codersujon.com
-        username: dev@codersujon.com
-        password: h@D(^Am=Uj#RyGAZ
-        server-dir: /live.codersujon.com/
-
-        exclude: |
-            **/.git*
-            **/node_modules/**
-            **/vendor/**
-            .github/**
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ../live.codersujon.com/
