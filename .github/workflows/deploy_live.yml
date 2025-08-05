@@ -48,7 +48,12 @@ jobs:
       - name: 🚀 SSH Deploy & Laravel Optimize
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /live.codersujon.com
+            cd /home/codersuj/live.codersujon.com
+
+            if [ ! -f artisan ]; then
+              echo "❌ artisan file not found! Laravel is not deployed here."
+              exit 1
+            fi
 
             echo "🛑 Putting Laravel app in maintenance mode..."
             php artisan down || true
