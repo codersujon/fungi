@@ -27,17 +27,6 @@ jobs:
           node-version: 'lts/*'
           cache: 'npm'
 
-      - name: 🧪 Install PHP Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: 🗂 Set Directory Permissions
-        run: chmod -R ug+rwx storage bootstrap/cache
-
-      - name: 💻 Install and Build Frontend
-        run: |
-          npm ci
-          npm run build
-
       - name: 🔐 Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -45,17 +34,31 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22692 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: 🚀 SSH Deploy & Laravel Optimize
+      - name: 🚀 Deploy & Build on Remote Server
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/codersuj/live.codersujon.com
+            cd /home/codersuj
 
-            if [ ! -f artisan ]; then
-              echo "❌ artisan file not found! Laravel is not deployed here."
-              exit 1
+            if [ ! -d "live.codersujon.com" ]; then
+              echo "📥 Cloning fresh Laravel repo..."
+              git clone git@github.com:codersujon/fungi.git live.codersujon.com
+            else
+              echo "🔄 Pulling latest code..."
+              cd live.codersujon.com
+              git pull origin main
             fi
 
-            echo "🛑 Putting Laravel app in maintenance mode..."
+            cd live.codersujon.com
+
+            echo "🛠️ Laravel Setup"
+            php -r "file_exists('.env') || copy('.env.example', '.env');"
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+
+            echo "🔨 Building Frontend"
+            npm ci
+            npm run build
+
+            echo "🛑 Maintenance Mode ON"
             php artisan down || true
 
             echo "🧹 Clearing old caches..."
@@ -64,19 +67,20 @@ jobs:
             php artisan route:clear
             php artisan view:clear
 
-            echo "⚙️ Caching configurations..."
+            echo "⚙️ Laravel Optimize"
+            php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
 
-            echo "✅ Bringing Laravel app back online..."
+            echo "✅ Maintenance Mode OFF"
             php artisan up
           EOF
 
       - name: 🌱 Run Seeder
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /live.codersujon.com
+            cd /home/codersuj/live.codersujon.com
             php artisan db:seed --force
           EOF
 
