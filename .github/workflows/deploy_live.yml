@@ -39,6 +39,8 @@ jobs:
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home/codersuj
 
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/github-deploy-key"
+
             if [ ! -d "live.codersujon.com" ]; then
               echo "📥 Cloning fresh Laravel repo..."
               git clone git@github.com:codersujon/fungi.git live.codersujon.com
