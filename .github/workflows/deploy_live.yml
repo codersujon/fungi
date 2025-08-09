@@ -34,6 +34,9 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22692 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+          echo "${{ secrets.DEPLOY_KEY_GITHUB }}" > ~/.ssh/github-deploy-key
+          chmod 600 ~/.ssh/github-deploy-key
+
       - name: 🚀 Deploy & Build on Remote Server
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
