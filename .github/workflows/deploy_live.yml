@@ -59,34 +59,19 @@ jobs:
               git pull origin main
             fi
 
-            echo "🛠️ Laravel Setup"
-            php -r "file_exists('.env') || copy('.env.example', '.env');"
-            composer install --no-interaction --prefer-dist --optimize-autoloader
-
-            echo "🔨 Building Frontend"
-            if [ -f package-lock.json ]; then
-              npm ci
-            else
-              npm install
-            fi
-            npm run build
-
-            echo "🛑 Maintenance Mode ON"
+            php artisan key:generate --force
+            
             php artisan down || true
 
-            echo "🧹 Clearing old caches..."
             php artisan config:clear
             php artisan cache:clear
             php artisan route:clear
             php artisan view:clear
 
-            echo "⚙️ Laravel Optimize"
-            php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
 
-            echo "✅ Maintenance Mode OFF"
             php artisan up
           EOF
 
