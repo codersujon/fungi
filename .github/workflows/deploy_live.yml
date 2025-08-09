@@ -27,29 +27,37 @@ jobs:
           node-version: 'lts/*'
           cache: 'npm'
 
-      - name: 🔐 Setup SSH
+      - name: 🔐 Setup SSH and Copy Deploy Key to Server
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22692 ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+          # Deploy key লোকাল সেভ
           echo "${{ secrets.DEPLOY_KEY_GITHUB }}" > ~/.ssh/github-deploy-key
           chmod 600 ~/.ssh/github-deploy-key
+
+          # Deploy key সার্ভারে পাঠানো
+          scp -P 22692 ~/.ssh/github-deploy-key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/.ssh/github-deploy-key
+          ssh -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "chmod 600 /home/${{ secrets.SSH_USER }}/.ssh/github-deploy-key"
 
       - name: 🚀 Deploy & Build on Remote Server
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/codersuj
+            set -e  # কোনো কমান্ড ফেল করলে স্ক্রিপ্ট বন্ধ
+
+            cd /home/${USER}
 
             export GIT_SSH_COMMAND="ssh -i ~/.ssh/github-deploy-key"
 
-            if [ ! -d "live.codersujon.com" ]; then
+            if [ ! -d "live.codersujon.com/.git" ]; then
               echo "📥 Cloning fresh Laravel repo..."
               git clone git@github.com:codersujon/fungi.git live.codersujon.com
             else
               echo "🔄 Pulling latest code..."
               cd live.codersujon.com
+              git reset --hard
               git pull origin main
             fi
 
@@ -60,7 +68,11 @@ jobs:
             composer install --no-interaction --prefer-dist --optimize-autoloader
 
             echo "🔨 Building Frontend"
-            npm ci
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              npm install
+            fi
             npm run build
 
             echo "🛑 Maintenance Mode ON"
@@ -85,7 +97,7 @@ jobs:
       - name: 🌱 Run Seeder
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/codersuj/live.codersujon.com
+            cd /home/${USER}/live.codersujon.com
             php artisan db:seed --force
           EOF
 
