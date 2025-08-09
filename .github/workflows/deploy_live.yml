@@ -45,7 +45,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             set -e
 
-            cd /home/${USER}
+            cd /home/${SSH_USER}
 
             export GIT_SSH_COMMAND="ssh -i ~/.ssh/github-deploy-key"
 
@@ -93,7 +93,7 @@ jobs:
       - name: 🌱 Run Seeder
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/${USER}/live.codersujon.com
+            cd /home/${SSH_USER}/live.codersujon.com
             php artisan db:seed --force
           EOF
 
