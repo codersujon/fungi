@@ -82,7 +82,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa -p 22692 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home/${USER}/live.codersujon.com
-            php artisan db:seed --force
+            php artisan migrate:fresh --seed
           EOF
 
       - name: 🌐 Health Check
