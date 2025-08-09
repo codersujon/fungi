@@ -60,7 +60,10 @@ jobs:
             fi
 
             php artisan key:generate --force
-            
+            php artisan cache:table || true
+            php artisan migrate --force
+
+
             php artisan down || true
 
             php artisan config:clear
