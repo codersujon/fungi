@@ -1,7 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\backend\AdminController;
 
-Route::get('/', function () {
-    return view('welcome');
+
+// Home Page
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'homePage')->name('home.page');
+});
+
+
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/admin/dashboard', 'dashboard')->name('admin.dashboard');
 });
