@@ -1,9 +1,12 @@
 name: 🚀 SSH Deploy to Production
 
+# Collection: 
+  #1. List 2. Arrays 3. Dictionaries/maps
+  
 on:
   push:
     branches:
-      - main
+      - main   # main branch
 
 jobs:
   deploy:
