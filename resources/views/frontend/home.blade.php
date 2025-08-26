@@ -954,13 +954,13 @@
 							        				<h4>Share:</h4>
 							        				<ul class="tag-list list-inline">
 							        					<li class="list-inline-item">
-							        						<a class="facebook-share" href="#"><i class="bi bi-facebook"></i></a>
+							        						<a class="facebook-share" href="https://www.facebook.com/CoderSujon/"><i class="bi bi-facebook"></i></a>
 							        					</li>
 							        					<li class="list-inline-item">
 							        						<a class="twitter-share" href="#"><i class="bi bi-twitter"></i></a>
 							        					</li>
 							        					<li class="list-inline-item">
-							        						<a class="linkedin-share" href="#"><i class="bi bi-linkedin"></i></a>
+							        						<a class="linkedin-share" href="https://www.linkedin.com/in/codersujon/"><i class="bi bi-linkedin"></i></a>
 							        					</li>
 							        				</ul>
 							        			</div>
@@ -1482,10 +1482,10 @@
 								Kilaboris nisi ut aliquip ex ea commodo consequat uis aute cupidatat non proident sunt in culd est laborum.
 							</p>
 							<ul class="list-inline footer-social">
-								<li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+								<li class="list-inline-item"><a href="https://www.facebook.com/CoderSujon/"><i class="fab fa-facebook-f"></i></a></li>
 								<li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
-								<li class="list-inline-item"><a href="#"><i class="fab fa-linkedin"></i></a></li>
-								<li class="list-inline-item"><a href="#"><i class="fab fa-youtube"></i></a></li>
+								<li class="list-inline-item"><a href="https://www.linkedin.com/in/codersujon/"><i class="fab fa-linkedin"></i></a></li>
+								<li class="list-inline-item"><a href="https://www.youtube.com/positiveworldbd"><i class="fab fa-youtube"></i></a></li>
 								<li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
 							</ul>
 						</div>

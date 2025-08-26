@@ -12,5 +12,5 @@ Route::controller(HomeController::class)->group(function () {
 
 
 Route::controller(AdminController::class)->group(function () {
-    Route::get('/admin/dashboard', 'dashboard')->name('admin.dashboard');
+    Route::get('/dashboard', 'dashboard')->name('dashboard');
 });
