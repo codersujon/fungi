@@ -9,7 +9,7 @@ on:
       - main   # main branch
 
 jobs:
-  deploy:
+  site-deploy:
     name: 🎉 Deploy to live.codersujon.com
     runs-on: ubuntu-latest
 
